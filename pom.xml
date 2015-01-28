@@ -8,7 +8,12 @@
     <artifactId>tomasis.video</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-
+    <repositories>
+        <repository>
+            <id>mvn-repo</id>
+            <url>http://maven.ansj.org/</url>
+        </repository>
+    </repositories>
     <!-- 版本配置 -->
     <properties>
         <spring.version>4.1.3.RELEASE</spring.version>
@@ -65,6 +70,13 @@
         <version>1.4</version>
     </dependency>
 
+    <!-- MongoDB 依赖包 -->
+    <dependency>
+        <groupId>org.mongodb</groupId>
+        <artifactId>mongo-java-driver</artifactId>
+        <version>2.12.2</version>
+    </dependency>
+
     <dependency>
         <groupId>org.jsoup</groupId>
         <artifactId>jsoup</artifactId>
@@ -75,6 +87,20 @@
         <groupId>org.apache.httpcomponents</groupId>
         <artifactId>httpclient</artifactId>
         <version>4.3.1</version>
+    </dependency>
+    <!-- 中文分词 -->
+
+    <dependency>
+        <groupId>org.ansj</groupId>
+        <artifactId>ansj_seg</artifactId>
+        <classifier>min</classifier> <!--如果是需要nlp方式分词,就去掉这个标签-->
+        <version>1.4</version>
+    </dependency>
+
+    <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>2.1.4</version>
     </dependency>
 </dependencies>
 </project>
