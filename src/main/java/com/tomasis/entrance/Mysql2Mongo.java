@@ -9,7 +9,6 @@ import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
 import com.textrank.TextRankKeyword;
 import com.tomasis.dao.YoukuDao;
-import com.tomasis.model.WordTag;
 import com.tomasis.model.YoukuBasic;
 import org.ansj.domain.Term;
 import org.ansj.splitWord.analysis.BaseAnalysis;
@@ -65,6 +64,8 @@ public class Mysql2Mongo{
         JsonNode jn1 = jn.get("description");
         if(jn1==null){
             BasicDBObject doc = new BasicDBObject("basicId", yb.getId());
+            List<BasicDBObject> tags = new ArrayList<BasicDBObject>();
+            BasicDBObject b = new BasicDBObject();
             coll.insert(doc);
         }else {
             List<String> keywords = new TextRankKeyword().getKeyword("", jn1.asText(), 2,true);

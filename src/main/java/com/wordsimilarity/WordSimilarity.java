@@ -251,7 +251,7 @@ public class WordSimilarity {
             }
             return max;
         }
-        System.out.println("其中有词没有被收录");
+        //System.out.println("其中有词没有被收录");
         return 0.0;
     }
 
