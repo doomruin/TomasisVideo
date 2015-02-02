@@ -1,5 +1,5 @@
 
-package com.wordsimilarity;
+package com.tomasis.service.wordsimilarity;
 
 import java.util.ArrayList;
 import java.util.HashMap;

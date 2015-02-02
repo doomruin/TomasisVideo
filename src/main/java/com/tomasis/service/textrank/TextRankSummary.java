@@ -1,4 +1,4 @@
-package com.textrank;
+package com.tomasis.service.textrank;
 
 import org.ansj.domain.Term;
 import org.ansj.splitWord.analysis.ToAnalysis;

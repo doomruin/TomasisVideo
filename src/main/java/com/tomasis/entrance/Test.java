@@ -1,6 +1,6 @@
 package com.tomasis.entrance;
 
-import com.wordsimilarity.WordSimilarity;
+import com.tomasis.service.wordsimilarity.WordSimilarity;
 
 /**
  * Created by Dreamwalker on 2015/1/30.

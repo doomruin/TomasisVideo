@@ -7,11 +7,9 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
-import com.textrank.TextRankKeyword;
+import com.tomasis.service.textrank.TextRankKeyword;
 import com.tomasis.dao.YoukuDao;
 import com.tomasis.model.YoukuBasic;
-import org.ansj.domain.Term;
-import org.ansj.splitWord.analysis.BaseAnalysis;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -26,8 +24,8 @@ public class Mysql2Mongo{
     private static int mySqlIndex =85;
 
     private static double TYPE_A_WEIGHT=1.0;
-    private static double TYPE_B_WEIGHT=3.5;
-    private static double TYPE_C_WEIGHT=1.0;
+    private static double TYPE_B_WEIGHT=10.5;
+    private static double TYPE_C_WEIGHT=2.0;
 
     private static ObjectMapper om = new ObjectMapper();
     static ApplicationContext ac = new ClassPathXmlApplicationContext("/config/Spring.xml");
@@ -102,10 +100,10 @@ public class Mysql2Mongo{
                 BasicDBObject c = new BasicDBObject();
                 c.put("tag",s);
                 c.put("weight",TYPE_C_WEIGHT);
-                c.put("type","c");
+                c.put("type", "c");
                 tags.add(c);
             }
-            doc.append("youkuDescription",jnDescription.asText());
+            doc.append("youkuDescription", jnDescription.asText());
         }
         doc.append("tags",tags);
         coll.insert(doc);

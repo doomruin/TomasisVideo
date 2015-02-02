@@ -1,5 +1,5 @@
 
-package com.wordsimilarity;
+package com.tomasis.service.wordsimilarity;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

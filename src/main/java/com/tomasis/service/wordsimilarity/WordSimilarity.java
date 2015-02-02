@@ -1,4 +1,4 @@
-package com.wordsimilarity;
+package com.tomasis.service.wordsimilarity;
 
 /**
  * Created by Dreamwalker on 2015/1/22.

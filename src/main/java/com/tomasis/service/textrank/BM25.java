@@ -1,4 +1,4 @@
-package com.textrank;
+package com.tomasis.service.textrank;
 
 import java.util.List;
 import java.util.Map;
