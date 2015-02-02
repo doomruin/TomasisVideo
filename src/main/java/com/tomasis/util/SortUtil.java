@@ -26,12 +26,12 @@ public class SortUtil {
         }
         //获取到了满足能量时的index,需要减一
         StringBuilder sb = new StringBuilder();
-        for(int i=0;i<curr-1 ; i++){
+        for(int i=0;i<curr-2 ; i++){
             sb.append(keyArray[i]);
             sb.append(",");
         }
-        System.out.println(keyArray[curr]);
-        sb.append(keyArray[curr]);
+        //System.out.println(keyArray[curr]);
+        sb.append(keyArray[curr-1]);
         return sb.toString();
 
     }

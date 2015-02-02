@@ -39,10 +39,12 @@ public class WordSimilar {
             }
             for(int i=0; i < all.size(); i++){
                 Map<String,Double> map = new HashMap<String,Double>();
+                int n =0;
                 for(int j=0; j < all.size(); j++){
                     if(i==j) continue;
                     try {
                         Double sim=sim((List<DBObject>) all.get(i).get("tags"), (List<DBObject>) all.get(j).get("tags"));
+                        //System.out.println(j);
                         map.put(all.get(j).get("basicId").toString(),sim);
                     }catch (IndexOutOfBoundsException e){
                         continue;
@@ -54,6 +56,8 @@ public class WordSimilar {
                 String a = SortUtil.extractByPower(result, POWER_PERCENT);
                 //bw.write(all.get(i).get("basicId").toString()+"||||||:"+result.keySet()+"/n");
                 //bw.newLine();//换行
+                putRecommendation(coll,(Integer)all.get(i).get("basicId"),a);
+                System.out.println(i);
             }
             //bw.close();
             cursor.close();
@@ -88,7 +92,12 @@ public class WordSimilar {
         return sim/(currTags.size()+anotherTags.size());
 
     }
-
-
-
+    private static void putRecommendation(DBCollection coll, Integer basicId,String recommendation){
+        BasicDBObject filter_dbObject = new BasicDBObject();
+        filter_dbObject.put("basicId",basicId);//一定要注意basicId的类型
+        DBObject updateDocument = new BasicDBObject();
+        updateDocument.put("recIds",recommendation);
+        DBObject updateSetValue=new BasicDBObject("$set",updateDocument);
+        coll.update(filter_dbObject,updateSetValue,true, false);
+    }
 }
