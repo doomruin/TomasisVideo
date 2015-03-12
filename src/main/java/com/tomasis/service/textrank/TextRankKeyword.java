@@ -116,98 +116,92 @@ public class TextRankKeyword
     public List<String> getKeyword(String title, String content, int numLimit,boolean deleteV){
         List<String> result = new ArrayList<String>();
         List<Term> termList = ToAnalysis.parse(title + content);
-//        System.out.println(termList);
+        //使用ansj的中文分词将句子分解
         List<String> wordList = new ArrayList<String>();
-        for (Term t : termList)
-        {
+        for (Term t : termList){
             if(deleteV){
-                if (!t.getNatrue().natureStr.startsWith("v")&&shouldInclude(t))
-                {
+                //如果去掉动词，动词在分解词中占很大比重
+                // 但大部分分解出来的动词都没有实际意义
+                if (!t.getNatrue().natureStr.startsWith("v")&&shouldInclude(t)){
                     wordList.add(t.getName());
                 }
             }else{
-                if (shouldInclude(t))
-                {
+                if (shouldInclude(t)){
+                    //判断分解词是否使用，按照词性判断
                     wordList.add(t.getName());
                 }
             }
-
         }
-//        System.out.println(wordList);
         Map<String, Set<String>> words = new HashMap<String, Set<String>>();
-        Queue<String> que = new LinkedList<String>();
-        for (String w : wordList)
-        {
-            if (!words.containsKey(w))
-            {
+        //使用新的容器储存词语，键为词语本身，
+        Queue<String> que = new LinkedList<String>();//邻近词队列
+        for (String w : wordList){
+            if (!words.containsKey(w)){//如果没有这个词
                 words.put(w, new HashSet<String>());
+                //添加到词语Map中
             }
-            que.offer(w);
-            if (que.size() > 5)
-            {
+            que.offer(w);//将词语的邻近词添加到队列
+            if (que.size() > 5){
+                //邻近词队列长度不能超过5个
                 que.poll();
             }
-
-            for (String w1 : que)
-            {
-                for (String w2 : que)
-                {
-                    if (w1.equals(w2))
-                    {
-                        continue;
-                    }
-
+            for (String w1 : que){
+                for (String w2 : que){
+                    if (w1.equals(w2))continue;
                     words.get(w1).add(w2);
                     words.get(w2).add(w1);
+                    //将邻近此队列中的词语全部加入词语容器
                 }
             }
         }
-//        System.out.println(words);
         Map<String, Float> score = new HashMap<String, Float>();
-        for (int i = 0; i < max_iter; ++i)
-        {
+        for (int i = 0; i < max_iter; ++i){
+        //最大迭代次数max_iter=200
             Map<String, Float> m = new HashMap<String, Float>();
             float max_diff = 0;
-            for (Map.Entry<String, Set<String>> entry : words.entrySet())
-            {
+            //TextRank公式转换为R=AX的矩阵形式，求解R，迭代直到R与X的差距较小
+            for (Map.Entry<String, Set<String>> entry : words.entrySet()){
+            //取出所有的词语以及邻近词语
                 String key = entry.getKey();
                 Set<String> value = entry.getValue();
-                m.put(key, 1 - d);
+                m.put(key, 1 - d);//d为阻尼系数
                 for (String other : value)
                 {
                     int size = words.get(other).size();
+                    //a的邻近词语b的邻近词语数量
                     if (key.equals(other) || size == 0) continue;
+                    //取出来的是自己，跳过
                     m.put(key, m.get(key) + d / size * (score.get(other) == null ? 0 : score.get(other)));
+                    //R（vi）=（1-d）+d*R(vj)/out（vi）
+                    //如果其他词语没有对当前词语评分，则置0
                 }
                 max_diff = Math.max(max_diff, Math.abs(m.get(key) - (score.get(key) == null ? 0 : score.get(key))));
+                //比较当前max_diff与新一次迭代结果的大小，取小的重新赋值
             }
             score = m;
             if (max_diff <= min_diff) break;
+            //当max_dift <min_diff=0.001是认为收敛结束，跳出循环
         }
         List<Map.Entry<String, Float>> entryList = new ArrayList<Map.Entry<String, Float>>(score.entrySet());
-        Collections.sort(entryList, new Comparator<Map.Entry<String, Float>>()
-        {
-            @Override
-            public int compare(Map.Entry<String, Float> o1, Map.Entry<String, Float> o2)
-            {
+        Collections.sort(entryList, new Comparator<Map.Entry<String, Float>>(){
+            public int compare(Map.Entry<String, Float> o1, Map.Entry<String, Float> o2){
                 return (o1.getValue() - o2.getValue() > 0 ? -1 : 1);
             }
         });
-//        System.out.println(entryList);
+        //将最终的评分列表按照得分值排序
         if(entryList.size() == 0){
             return result;
         }else if(entryList.size() <=1){
             result.add(entryList.get(1).getKey());
         }else{
-            for (int i = 0; i < entryList.size(); ++i)
-            {
+            for (int i = 0; i < entryList.size(); ++i){
                 String a = entryList.get(i).getKey();
                 if(a.length() >=numLimit){
                     result.add(a);
                 }
             }
         }
-
+        //将列表转化为String输出
         return result;
     }
 

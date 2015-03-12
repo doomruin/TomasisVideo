@@ -25,25 +25,25 @@ public class WordSimilarity {
     // 词库中所有的具体词，或者义原
     private static Map<String, List<Word>> ALLWORDS = new HashMap<String, List<Word>>();
     /**
-     * sim(p1,p2) = alpha/(d+alpha)
+     * sim(p1,p2) = a/(d+a)
      */
-    private static double alpha = 1.6;
+    private static double a = 1.6;
     /**
      * 计算实词的相似度，参数，基本义原权重
      */
-    private static double beta1 = 0.5;
+    private static double b1 = 0.5;
     /**
      * 计算实词的相似度，参数，其他义原权重
      */
-    private static double beta2 = 0.2;
+    private static double b2 = 0.2;
     /**
      * 计算实词的相似度，参数，关系义原权重
      */
-    private static double beta3 = 0.17;
+    private static double b3 = 0.17;
     /**
      * 计算实词的相似度，参数，关系符号义原权重
      */
-    private static double beta4 = 0.13;
+    private static double b4 = 0.13;
     /**
      * 具体词与义原的相似度一律处理为一个比较小的常数. 具体词和具体词的相似度，如果两个词相同，则为1，否则为0.
      */
@@ -292,13 +292,13 @@ public class WordSimilarity {
             map2 = w2.getRelationSimbolPrimitives();
             double sim4 = simMap(map1, map2);
             double product = sim1;
-            double sum = beta1 * product;
+            double sum = b1 * product;
             product *= sim2;
-            sum += beta2 * product;
+            sum += b2 * product;
             product *= sim3;
-            sum += beta3 * product;
+            sum += b3 * product;
             product *= sim4;
-            sum += beta4 * product;
+            sum += b4 * product;
             return sum;
         }
         return 0.0;
@@ -400,7 +400,7 @@ public class WordSimilarity {
      */
     public static double simPrimitive(String primitive1, String primitive2) {
         int dis = disPrimitive(primitive1, primitive2);
-        return alpha / (dis + alpha);
+        return a / (dis + a);
     }
 
     /**

@@ -55,55 +55,55 @@ public class HttpUtil {
 	 * 一个通用的httpPost请求函数，返回String
 	 */
 	
-	public static String httpClient_post(String url, Map<String, String> rawParams){
-		String result = "1";
-		HttpPost post = new HttpPost(url);
-        HttpParams param = client.getParams();
-        HttpConnectionParams.setConnectionTimeout(param, 30000);
-        HttpConnectionParams.setSoTimeout(param, 60000);
+public static String httpClient_post(String url, Map<String, String> rawParams){
+    String result = "1";
+    HttpPost post = new HttpPost(url);
+    HttpParams param = client.getParams();
+    HttpConnectionParams.setConnectionTimeout(param, 30000);
+    HttpConnectionParams.setSoTimeout(param, 60000);
 
-        HttpResponse httpResponse = null;
+    HttpResponse httpResponse = null;
 
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		for (String key : rawParams.keySet()) {
-			// 封装请求参数
-			params.add(new BasicNameValuePair(key, rawParams.get(key)));
-			//Log.i("param "+key+":", rawParams.get(key));
-		}			
-		try {
-			post.setEntity(new UrlEncodedFormEntity(params,
-					HTTP.UTF_8));
-			httpResponse = client.execute(post);
-			if (httpResponse.getStatusLine().getStatusCode() == 200) {
-				 result = EntityUtils.toString(httpResponse.getEntity(),"UTF-8");
-			}
+    List<NameValuePair> params = new ArrayList<NameValuePair>();
+    for (String key : rawParams.keySet()) {
+        // 封装请求参数
+        params.add(new BasicNameValuePair(key, rawParams.get(key)));
+        //Log.i("param "+key+":", rawParams.get(key));
+    }
+    try {
+        post.setEntity(new UrlEncodedFormEntity(params,
+                HTTP.UTF_8));
+        httpResponse = client.execute(post);
+        if (httpResponse.getStatusLine().getStatusCode() == 200) {
+             result = EntityUtils.toString(httpResponse.getEntity(),"UTF-8");
+        }
 
-		} catch(ConnectionPoolTimeoutException e) {
-            return "E";
-        }catch(UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			result = IO_EXCEPTION;
-		}finally {
-            if(httpResponse != null) {
-                try {
-                    EntityUtils.consume(httpResponse.getEntity()); //会自动释放连接
-                }catch (IOException e){
-                    e.printStackTrace();
-                    result = IO_EXCEPTION;
-                }
+    } catch(ConnectionPoolTimeoutException e) {
+        return "E";
+    }catch(UnsupportedEncodingException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+    }catch (ParseException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+    } catch (ClientProtocolException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+    }catch (IOException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+        result = IO_EXCEPTION;
+    }finally {
+        if(httpResponse != null) {
+            try {
+                EntityUtils.consume(httpResponse.getEntity()); //会自动释放连接
+            }catch (IOException e){
+                e.printStackTrace();
+                result = IO_EXCEPTION;
             }
         }
-        return result;
-	}
+    }
+    return result;
+}
 
 }
