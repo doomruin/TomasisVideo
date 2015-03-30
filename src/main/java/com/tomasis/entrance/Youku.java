@@ -31,7 +31,8 @@ public class Youku {
     /////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////
     public static void main(String[] args){
-        batchAddJsonInfoToYoukuBasic(7093);
+        //batchAddJsonInfoToYoukuBasic(7093);
+        crawlYoukuBasicInfo();
     }
     /////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////
@@ -39,13 +40,15 @@ public class Youku {
         ApplicationContext ac = new ClassPathXmlApplicationContext("/config/Spring.xml");
         YoukuDao youkuDao=(YoukuDao)ac.getBean("youkuDao");
         while(!nextPage.equals("end")){
-            System.out.println("start crawling------"+nextPage);
-            List<YoukuBasic> ybs=getVideoName("http://www.youku.com/v_showlist/c176g0d1s1p14.html");
-            for(YoukuBasic yb :ybs){
-                youkuDao.insert(yb);
-            }
-            System.out.println("end crawling------"+nextPage);
-            System.out.println("-------------------!!!!!!!!-------------------------");
+            System.out.println("start crawling: youku+"+nextPage);
+            List<YoukuBasic> ybs=getVideoName("http://www.youku.com/v_olist/c_97.html");
+//            for(YoukuBasic yb :ybs){
+//                youkuDao.insert(yb);
+//            }
+            System.out.println("获取到视频名称：  "+spilit(ybs));
+            System.out.println("本页面包含：  "+ybs.size()+"个视频");
+            System.out.println("end crawling:youku+"+nextPage);
+            System.out.println("-------------------------------------------------------------------------------------------------------------");
             try {
                 Thread.sleep(10000);
             }catch(Exception e){
@@ -54,6 +57,14 @@ public class Youku {
         }
 
 
+    }
+    private static String spilit(List<YoukuBasic> ybs){
+        StringBuilder sb = new StringBuilder();
+        for(YoukuBasic yb :ybs){
+            sb.append(yb.getName());
+            sb.append(",");
+        }
+        return sb.toString();
     }
 
     private static List<YoukuBasic> getVideoName(String url){
